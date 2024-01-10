@@ -1,19 +1,19 @@
 # -- Configuration parameters for setup and initial configuration secret and config layers used by Janssen services.
 # -- Fully qualified domain name to be used for Janssen installation. This address will be used to reach Janssen services.
-fqdn: demoexample.jans.io
+fqdn: jobrain.app
 # -- Admin password to log in to the UI.
-adminPassword: Test1234#
+adminPassword: 123Das456!
 # -- City. Used for certificate creation.
-city: Austin
+city: Delaware
 # -- Country code. Used for certificate creation.
 countryCode: US
 # -- Email address of the administrator usually. Used for certificate creation.
-email: support@jans.io
+email: support@jobrain.app
 # -- Organization name. Used for certificate creation.
-orgName: Janssen
+orgName: Jobrain
 # -- Resource specs.
 # -- State code. Used for certificate creation.
-state: TX
+state: DE
 # -- Persistence backend to run Janssen with couchbase|hybrid|sql|spanner.
 cnPersistenceType: sql
 # -- Salt. Used for encoding/decoding sensitive data. If omitted or set to empty string, the value will be self-generated. Otherwise, a 24 alphanumeric characters are allowed as its value.
@@ -225,14 +225,14 @@ auth-server-key-rotation:
   resources:
     limits:
       # -- CPU limit.
-      cpu: 300m
+      cpu: "4"
       # -- Memory limit.
-      memory: 300Mi
+      memory: "4Gi"
     requests:
       # -- CPU request.
-      cpu: 300m
+      cpu: "1"
       # -- Memory request.
-      memory: 300Mi
+      memory: "1Gi"
   # -- Configure any additional volumes that need to be attached to the pod
   volumes: []
   # -- Configure any additional volumesMounts that need to be attached to the containers

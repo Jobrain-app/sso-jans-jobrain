@@ -71,6 +71,8 @@ class EditIdentityProvideDialog(JansGDialog, DialogUtils):
 
     def create_window(self) -> None:
 
+        enabled = self.data['enabled'] if 'enabled' in self.data else True
+
         def read_metadata_file(path):
             self.metadata_file_path = path
 
@@ -163,8 +165,18 @@ class EditIdentityProvideDialog(JansGDialog, DialogUtils):
                     value=self.data.get('name', ''),
                     style=cli_style.edit_text_required,
                     jans_help=_("Name for Identity Provider"),
-                    widget_style=cli_style.white_bg_widget
+                    widget_style=cli_style.white_bg_widget,
+                    read_only = not self.new_provider
                 ),
+
+                common_data.app.getTitledCheckBox(
+                    _("Enable Provider"),
+                    name='enabled',
+                    checked=enabled,
+                    jans_help=_("Is this Provider enabled?"),
+                    style=cli_style.check_box
+                ),
+
 
                 common_data.app.getTitledText(
                     title=_("Display Name"),
@@ -220,7 +232,9 @@ class EditIdentityProvideDialog(JansGDialog, DialogUtils):
 
     def save(self):
 
-        provider_data = self.make_data_from_dialog({'provider': self.edit_provider_container})
+        new_data = self.make_data_from_dialog({'provider': self.edit_provider_container})
+        provider_data = copy.deepcopy(self.data)
+        provider_data.update(new_data)
 
         provider_data.pop('importMetadataFromFile', None)
 
@@ -242,7 +256,7 @@ class EditIdentityProvideDialog(JansGDialog, DialogUtils):
                 self.data = response.json()
                 common_data.app.stop_progressing(_("IDP Provider was saved."))
                 self.future.set_result(DialogResult.ACCEPT)
-                await self.myparent.get_trust_relations()
+                await self.myparent.get_identity_providers()
 
             else:
                 common_data.app.show_message(_(common_strings.error), _("Save failed: Status {} - {}\n").format(response.status_code, response.text), tobefocused=self.edit_provider_container)
